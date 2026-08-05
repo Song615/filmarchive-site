@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Subscription Terms · FilmArchive</title>
-<meta name="description" content="FilmArchive Pro Subscription Terms">
+<title>订阅条款 · FilmArchive</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #f5efe0; color: #2b312e; font-family: -apple-system, "PingFang SC", "Hiragino Sans", "Helvetica Neue", sans-serif; line-height: 1.75; }
@@ -16,8 +15,9 @@ nav.top a { color: #3f6e8c; text-decoration: none; margin-right: 18px; }
 .lang-switch { display: flex; gap: 10px; margin-bottom: 30px; }
 .lang-switch button { border: 1.5px solid #2b312e; background: #fffdf6; color: #2b312e; border-radius: 999px; padding: 6px 18px; font-size: 14px; cursor: pointer; }
 .lang-switch button.active { background: #3f6e8c; border-color: #3f6e8c; color: #fff; }
-.lang-panel { display: none; }
-.lang-panel.active { display: block; }
+.lang-panel, .i18n { display: none; }
+.lang-panel.active, .i18n.active { display: block; }
+span.i18n.active { display: inline; }
 section.lang { background: #fffdf6; border: 1.5px solid #2b312e; border-radius: 14px; padding: 28px 26px; margin-bottom: 28px; }
 section.lang p { margin-bottom: 12px; font-size: 15px; }
 .card { background: #fffdf6; border: 1.5px solid #2b312e; border-radius: 14px; padding: 24px 26px; margin-bottom: 22px; }
@@ -32,9 +32,9 @@ footer { margin-top: 40px; color: #8b9288; font-size: 13px; text-align: center; 
 <div class="wrap">
 <header>
   <h1>FilmArchive</h1>
-  <div class="sub">Film Archive · Log, develop &amp; scan your film</div>
+  <div class="sub"><span class="i18n" data-lang="zh">胶片档案 · 胶卷拍摄 / 冲洗 / 扫描全记录</span><span class="i18n" data-lang="en">Film Archive · Log, develop &amp; scan your film</span><span class="i18n" data-lang="ja">フィルムアーカイブ · 撮影 / 現像 / スキャンを記録</span></div>
 </header>
-<nav class="top"><a href="index.html">Support</a><a href="privacy.html">Privacy Policy</a><a href="subscription-terms.html">Subscription Terms</a></nav>
+<nav class="top"><a href="index.html"><span class="i18n" data-lang="zh">支持</span><span class="i18n" data-lang="en">Support</span><span class="i18n" data-lang="ja">サポート</span></a><a href="privacy.html"><span class="i18n" data-lang="zh">隐私政策</span><span class="i18n" data-lang="en">Privacy Policy</span><span class="i18n" data-lang="ja">プライバシーポリシー</span></a><a href="subscription-terms.html"><span class="i18n" data-lang="zh">订阅条款</span><span class="i18n" data-lang="en">Subscription Terms</span><span class="i18n" data-lang="ja">サブスクリプション規約</span></a></nav>
 <div class="lang-switch">
 <button data-lang="zh">简体中文</button>
 <button data-lang="en">English</button>
@@ -51,6 +51,7 @@ footer { margin-top: 40px; color: #8b9288; font-size: 13px; text-align: center; 
 <script>
 (function () {
   var langs = ['zh', 'en', 'ja'];
+  var titles = {"zh": "订阅条款 · FilmArchive", "en": "Subscription Terms · FilmArchive", "ja": "サブスクリプション規約 · FilmArchive"};
   var nav = (navigator.language || 'en').toLowerCase();
   var detected = nav.indexOf('zh') === 0 ? 'zh' : (nav.indexOf('ja') === 0 ? 'ja' : 'en');
   var saved = null;
@@ -59,12 +60,14 @@ footer { margin-top: 40px; color: #8b9288; font-size: 13px; text-align: center; 
   function apply(lang) {
     current = lang;
     try { localStorage.setItem('fa-lang', lang); } catch (e) {}
-    document.querySelectorAll('.lang-panel').forEach(function (p) {
+    document.querySelectorAll('.lang-panel, .i18n').forEach(function (p) {
       p.classList.toggle('active', p.getAttribute('data-lang') === lang);
     });
     document.querySelectorAll('.lang-switch button').forEach(function (b) {
       b.classList.toggle('active', b.getAttribute('data-lang') === lang);
     });
+    if (titles[lang]) { document.title = titles[lang]; }
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-Hans' : lang);
   }
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.lang-switch button').forEach(function (b) {
